@@ -16,6 +16,7 @@ return function ()
         print("p2:", newPointerVar.Value)
     end
 
+    print(string.format("p1 address: %s | p2 address: %s", newPointerVar:GetAddress(), point:GetAddress()))
     summarize()
     newPointerVar.Value = 100
     summarize()
