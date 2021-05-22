@@ -45,6 +45,7 @@ function pointer.New(value: any): (Pointer, string)
 		end
 		
 		function newPointer:Delete()
+			table.remove(pointer.Pointers, self:GetAddress())
 			self.Value = nil
 			self = nil
 		end
