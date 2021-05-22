@@ -1,4 +1,4 @@
---!nonstrict
+--!nocheck
 --[[
     Author: @ProjektKris
     serverside tester
@@ -14,13 +14,16 @@ type Result = {
 local results: Array<Result> = {}
 for _, module: Instance in pairs(script:GetChildren()) do
     if module:IsA("ModuleScript") then
-        local newResult: Result
+        local newResult: Result = {
+            t0 = 0,
+            t1 = 0,
+            module = module
+        }
         newResult.t0 = os.clock()
 
         require(module)()
 
         newResult.t1 = os.clock()
-        newResult.module = module
 
         results[#results+1] = newResult
     end
@@ -28,5 +31,5 @@ end
 
 -- summarize
 for _, res: Result in pairs(results) do
-    print(string.format("%s finished in %f", res.module.name, res.t1-res.t0))
+    print(string.format("%s finished in %f", res.module.Name, res.t1-res.t0))
 end

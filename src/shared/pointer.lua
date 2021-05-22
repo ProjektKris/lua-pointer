@@ -1,4 +1,4 @@
---!nonstrict
+--!nocheck
 --[[
 	Author: @ProjektKris
 	lua pointer, takes advantage of table behaviour that doesn't clone, instead points
