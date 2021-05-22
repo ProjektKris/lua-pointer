@@ -12,15 +12,15 @@ export type Pointer = {
 	Delete: () -> ()
 }
 
-local pointers = {}
-local pointer = {}
-pointer.__index = pointer
+local pointer = {
+	Pointers = {} -- it had to be done, also this isnt replicated across clients so it's quite safe
+}
 
 function pointer.GetPointerFromAddress(address: string): (Pointer, string)
 	local p: Pointer
 	local s: boolean, err: string = pcall(function()
-		if pointers[address] then
-			p = pointers[address]
+		if pointer.Pointers[address] then
+			p = pointer.Pointers[address]
 		else
 			error("pointer not found")
 		end
@@ -40,8 +40,16 @@ function pointer.New(value: any): (Pointer, string)
 		newPointer = {
 			Value = value
 		}
-		setmetatable(newPointer, pointer)
-		pointers[newPointer:GetAddress()] = newPointer
+		function newPointer:GetAddress(): string
+			return tostring(self)
+		end
+		
+		function newPointer:Delete()
+			self.Value = nil
+			self = nil
+		end
+		pointer.Pointers[newPointer:GetAddress()] = newPointer
+		print(shared)
 	end)
 	if not s then
 		-- error
@@ -49,15 +57,6 @@ function pointer.New(value: any): (Pointer, string)
 	else
 		return newPointer, nil
 	end
-end
-
-function pointer:GetAddress(): string
-	return tostring(self)
-end
-
-function pointer:Delete()
-	self.Value = nil
-	self = nil
 end
 
 return pointer
